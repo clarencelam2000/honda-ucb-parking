@@ -1,0 +1,1 @@
+Web application to display nearby best parking spots to your entered destination, using Google Maps API and Google App Engine.  

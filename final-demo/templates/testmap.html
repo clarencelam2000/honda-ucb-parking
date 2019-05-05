@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF=8">
+	<title>Park Smart</title>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+	<!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrxhYzFUu_gd2PvrYLYOHinmzuIEh3dFM"></script> -->
+    
+    <!-- <script type="text/javascript">
+        var markers = [];
+        var locations = [{{init_points[0]|tojson}}];
+        var new_location = {{init_points[0]|tojson}};
+        var destination_coords = {{init_points[1]|tojson}};
+        var steps_remaining = {{steps_remaining}};
+        var search_term = "{{search_term}}"; 
+        </script> -->
+
+</head>
+
+
+<!-- <body onload="initMap()"> -->
+<body onload="">
+    <!-- <button id="btnaddmarker" onclick="doFunction();" >next point</button> -->
+    <div class="container">
+        <h1>Traveling from {{departure}} to {{destination}} at {{search_term}}</h1>
+        <!-- <div id='map_plot' style="width:100%; height:400px;"></div>
+        <BR>
+        <div id='logger'></div> -->
+        <h2>Origin: {{init_points[0]}}</h2>
+        <h2>Dest: {{init_points[1]}}</h2>
+
+    </div>
+    
+    </body>
+</html>
