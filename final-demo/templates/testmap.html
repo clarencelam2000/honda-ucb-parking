@@ -16,9 +16,15 @@
         var new_location = {{init_points[0]|tojson}};
         var destination_coords = {{init_points[1]|tojson}};
         var steps_remaining = {{steps_remaining}};
-        var search_term = "{{search_term}}"; 
+        var time = "{{time}}"; 
         </script> -->
-
+        <style>
+                /* Set the size of the div element that contains the map */
+               #map {
+                 height: 50vh;  /* The height is 400 pixels */
+                 width: 100%;  /* The width is the width of the web page */
+                }
+        </style>
 </head>
 
 
@@ -26,14 +32,53 @@
 <body onload="">
     <!-- <button id="btnaddmarker" onclick="doFunction();" >next point</button> -->
     <div class="container">
-        <h1>Traveling from {{departure}} to {{destination}} at {{search_term}}</h1>
+        <h1>Traveling from {{departure}} to {{destination}} at {{time}}</h1>
         <!-- <div id='map_plot' style="width:100%; height:400px;"></div>
         <BR>
         <div id='logger'></div> -->
-        <h2>Origin: {{init_points[0]}}</h2>
-        <h2>Dest: {{init_points[1]}}</h2>
+        <!-- <h2>Origin: {{init_points[0]}}</h2>
+        <h2>Dest: {{init_points[1]}}</h2> -->
 
     </div>
+
+    <div class="container">
+            <h3>Origin Coordinates: {{init_points[0]}}</h3>
+            <h3>Destination Coordinates: {{init_points[1]}}</h3>
+            <h3>We found parking at: {{parking_loc_list}}</h3>
+            <a href={{gmap_url}}>
+                Open Directions in Google Maps </a>
+        </div>
+
+    <!--The div element for the map -->
+    <div id="map"></div>
+    <script>
+        // Initialize and add the map
+        function initMap() {
+            // The location of destination
+            var dest = {lat: {{init_points[1][0]}}, lng: {{init_points[1][1]}}};
+            // var parking = {lat: -25.344, lng: 131.036};
+            // The map, centered at destination
+            var map = new google.maps.Map(
+                document.getElementById('map'), {zoom: 12, center: dest});
+            // The marker, positioned at Uluru
+            var marker = new google.maps.Marker({position: dest, map: map});
+            
+            var locations = {{parking_loc_list}};
+
+            // var markers = locations.map(function(location) {
+            //     return new google.maps.Marker({
+            // position: {lat: location[0], lng: location[1]}, );
+            //     , map: map});
+
+            // for (i = 0; i < parking_loc_list.length; i++) { 
+            //     var dest = {lat: {{init_points[1][0]}}, lng: {{init_points[1][1]}}};
+            //     var marker = new google.maps.Marker({position: dest, map: map});
+            // }
+        }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrxhYzFUu_gd2PvrYLYOHinmzuIEh3dFM&callback=initMap">
+    </script>
     
     </body>
 </html>
