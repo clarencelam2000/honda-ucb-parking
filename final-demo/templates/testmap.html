@@ -32,7 +32,13 @@
 <body onload="">
     <!-- <button id="btnaddmarker" onclick="doFunction();" >next point</button> -->
     <div class="container">
-        <h1>Traveling from {{departure}} to {{destination}} at {{time}}</h1>
+        <h2>Traveling from: {{departure}} </h2>
+            <!-- <br>
+            <br> -->
+        <h2>To: {{destination}} </h2>    
+            <!-- <br>
+            <br> -->
+        <h2>Time: {{time}}</h2>
         <!-- <div id='map_plot' style="width:100%; height:400px;"></div>
         <BR>
         <div id='logger'></div> -->
@@ -42,12 +48,15 @@
     </div>
 
     <div class="container">
-            <h3>Origin Coordinates: {{init_points[0]}}</h3>
-            <h3>Destination Coordinates: {{init_points[1]}}</h3>
-            <h3>We found parking at: {{parking_loc_list}}</h3>
-            <a href={{gmap_url}}>
-                Open Directions in Google Maps </a>
+            <p>Origin Coordinates: {{init_points[0]}}</p>
+            <p>Destination Coordinates: {{init_points[1]}}</p>
+            <h4>We found parking at: {{parking_loc_list}}</h4>
+            <h3><a href={{gmap_url}}>
+                Open Directions in Google Maps </a></h3>
+            <br>
         </div>
+
+    <!--  -->
 
     <!--The div element for the map -->
     <div id="map"></div>
@@ -55,13 +64,18 @@
         // Initialize and add the map
         function initMap() {
             // The location of destination
+            var parking_coords = {lat: {{parking_loc_list[0][0]}}, lng: {{parking_loc_list[0][1]}}};
             var dest = {lat: {{init_points[1][0]}}, lng: {{init_points[1][1]}}};
+
             // var parking = {lat: -25.344, lng: 131.036};
             // The map, centered at destination
             var map = new google.maps.Map(
-                document.getElementById('map'), {zoom: 12, center: dest});
-            // The marker, positioned at Uluru
-            var marker = new google.maps.Marker({position: dest, map: map});
+                document.getElementById('map'), {zoom: 14, center: dest});
+
+            // The markers, positioned at dest and parking
+            var dest_marker = new google.maps.Marker({position: dest, map: map, label: 'D'});
+            var parking_marker = new google.maps.Marker({position: parking_coords, map: map, label: 'P'});
+
             
             var locations = {{parking_loc_list}};
 

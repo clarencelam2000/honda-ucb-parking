@@ -22,6 +22,7 @@ except ImportError:
 
 app = Flask(__name__)
 GOOGLE_API_KEY = "AIzaSyCrxhYzFUu_gd2PvrYLYOHinmzuIEh3dFM" 
+twelth_ave_lat_lon = (39.996643, -83.017430)
 
 
 class ReusableForm(Form):
@@ -74,6 +75,9 @@ def return_parking_latlon(dest_lat, dest_lon, time='00:00'):
 
     # parking_loc_list = TODO @ Alex: Place predict code here
     parking_loc_list = [(dest_lat, dest_lon)]
+
+    # TODO: Remove this example
+    parking_loc_list = [twelth_ave_lat_lon]
     return parking_loc_list
 
 @app.route("/map", methods=['POST', 'GET'])
@@ -113,7 +117,7 @@ def get_information():
 
         # pass info back to map page
         # init_points = [[departure, departure_coords['lat'], departure_coords['lng'], 'Starting location', 5], [destination, destination_coords['lat'], destination_coords['lng'], 'Ending location', 5]]
-        init_points = [[departure_coords['lat'], departure_coords['lng']], [destination_coords['lat'], destination_coords['lng']]]
+        init_points = [(departure_coords['lat'], departure_coords['lng']), (destination_coords['lat'], destination_coords['lng'])]
 
         # generate google map link // see here: https://developers.google.com/maps/documentation/urls/guide 
         gmap_departure = '{}%2C{}'.format(departure_coords['lat'], departure_coords['lng'])
