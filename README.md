@@ -8,7 +8,7 @@ Front End Demo is under final-demo/. To run demo locally, cd into final-demo and
 ```sh
 pip install -r requirements.txt
 ```
-to install all dependencies. (Optionally beforehand, can use virtualenv and pip install in virtualenv.)
+to install all dependencies. (Optionally beforehand, can use virtualenv and pip install in virtualenv. [More info on virtualenv from PythonAnywhere.](https://help.pythonanywhere.com/pages/Virtualenvs))
 
 Then, to start Flask server:
 ```sh
