@@ -4,7 +4,10 @@ from wtforms import Form, TextField, TextAreaField, validators, StringField, Sub
 import requests
 import json
 import logging
-import requests_toolbelt.adapters.appengine
+# import requests_toolbelt.adapters.appengine
+import math
+import pandas as pd
+import numpy as np
 
 # requests_toolbelt.adapters.appengine.monkeypatch()
 
@@ -45,6 +48,14 @@ def index():
 # def hello():
 #     return "Hello World!"
 
+def current_meter_fullness(time, day, month, lat, long):
+    segmented_df = df[df["Months"] == month][df["DayOfWeek"] == day][df["TimeOnDay"] == time]
+    meter_info = distance_tometers(long, lat)
+    meter = meter_info[0]
+    coords = meter_info[2:4]
+    return(meter, coords, int(segmented_df[meter])/int(segmented_df["NumberOfMoDoW"]))
+
+
 def predict(dest_lat, dest_lon, time):
     '''
     Returns a list of possible parking locations around the destination
@@ -52,13 +63,8 @@ def predict(dest_lat, dest_lon, time):
 
     Example return list: [(-33.556, -32.555), (-33.999, -32.888)]
     '''
-    # TODO @ Alex: place your code here and replace the line below with your own return
-    # Note: if model only returns one parking location, then just return a list 
-    return [(dest_lat, dest_lon)]
+    return [distance_tometers(dest_lon, dest_lat, time)]
 
-def train_model(**kwargs):
-    # TODO @ Alex: place training code here, modify function args as needed
-    print('Running train_model')
 
 def return_parking_latlon(dest_lat, dest_lon, time='00:00'):
     '''
@@ -71,13 +77,7 @@ def return_parking_latlon(dest_lat, dest_lon, time='00:00'):
 
     Example return list: [(-33.556, -32.555), (-33.999, -32.888)]
     '''
-    # TODO @ Alex: Clean time input as you wish, currently is a string of format '00:00'
-
-    # parking_loc_list = TODO @ Alex: Place predict code here
-    parking_loc_list = [(dest_lat, dest_lon)]
-
-    # TODO: Remove this example
-    parking_loc_list = [twelth_ave_lat_lon]
+    parking_loc_list = predict(dest_lat, dest_lon, time)
     return parking_loc_list
 
 @app.route("/map", methods=['POST', 'GET'])
@@ -122,7 +122,7 @@ def get_information():
         # generate google map link // see here: https://developers.google.com/maps/documentation/urls/guide 
         gmap_departure = '{}%2C{}'.format(departure_coords['lat'], departure_coords['lng'])
         gmap_dest = '{}%2C{}'.format(destination_coords['lat'], destination_coords['lng'])
-        gmap_waypoints = '{}%2C{}'.format(parking_loc_list[0][0], parking_loc_list[0][1]) # TODO @ Alex: place best parking location here; currently defined as first parking location in the list returned by the return_parking_latlon function
+        gmap_waypoints = '{}%2C{}'.format(parking_loc_list[0][0], parking_loc_list[0][1]) #@ Alex: place best parking location here; currently defined as first parking location in the list returned by the return_parking_latlon function
         gmap_parameters = '&origin=' + gmap_departure + '&destination=' + gmap_dest + '&waypoints=' + gmap_waypoints
         gmap_url = 'https://www.google.com/maps/dir/?api=1' + gmap_parameters
 
@@ -136,7 +136,23 @@ def get_information():
 # def hello_name(name):
 #     return "Hello {}!".format(name)
 
+def distance_tometers(x,y,time):
+    x1 = x
+    y1 = y
+    min_dist = 100000000000000
+    currX = 0
+    currY = 0
+    for each in np.arange(len(pm)):
+        x2 = pm["X"][each]
+        y2 = pm["Y"][each]
+        dist = math.hypot(x2 - x1, y2 - y1)
+        if min_dist > dist: 
+            min_dist = dist
+            currX = pm['X'][each]
+            currY = pm['Y'][each]
+    return (currY, currX)
+
 if __name__ == '__main__':
-    print('Training model right now.')
-    train_model()
+    pm = pd.read_csv('data/Parking_Meters.csv')
+    pm = pm[pm["METER_STATUS"] == 'Operational'].reset_index()
     app.run()
